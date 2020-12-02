@@ -194,8 +194,8 @@ def simple_default_pipeline(adata, batch=None, filter_only=False, post_norm_only
             batches = get_good_sized_batch(adata.obs.loc[k_cell, batch])
             k_cell = k_cell & adata.obs[batch].isin(batches)
         adata = adata[k_cell, :].copy()
-        adata.var['n_counts'] = adata.X.sum(axis=0).A1
-        adata.var['n_genes'] = (adata.X > 0).sum(axis=0).A1
+        adata.var['n_counts'] = np.ravel(adata.X.sum(axis=0))
+        adata.var['n_genes'] = np.ravel((adata.X > 0).sum(axis=0))
         k_gene = adata.var['n_genes'] >= 3
         adata = adata[:, k_gene].copy()
         if filter_only:
